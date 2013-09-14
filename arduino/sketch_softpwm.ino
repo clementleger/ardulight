@@ -66,7 +66,7 @@ void setup()
   Serial.begin( 38400 );
 
   /* begin with 60hz pwm frequency */
-  SoftPWM.begin( 60 );
+  SoftPWM.begin( 120 );
   
   /* print interrupt load for diagnostic purpose */
   SoftPWM.printInterruptLoad();
