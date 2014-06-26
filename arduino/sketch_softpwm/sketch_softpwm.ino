@@ -54,7 +54,7 @@ SOFTPWM_DEFINE_CHANNEL_INVERT( 15, DDRC, PORTC, PORTC1 );
 /* Or you can make one with only 100 brightness levels (0 ~ 99).
  * by using less brightness levels, you may be able to use higher
  * pwm frequencies. */
-SOFTPWM_DEFINE_OBJECT_WITH_BRIGHTNESS_LEVELS( 12, 255 );
+SOFTPWM_DEFINE_OBJECT_WITH_BRIGHTNESS_LEVELS( 12, 100 );
 
 /* if you want to use the SoftPWM object outside where it's defined,
  * add the following line to the file. */
@@ -66,7 +66,7 @@ void setup()
   Serial.begin( 38400 );
 
   /* begin with 60hz pwm frequency */
-  SoftPWM.begin( 120 );
+  SoftPWM.begin( 100 );
   
   /* print interrupt load for diagnostic purpose */
   SoftPWM.printInterruptLoad();
@@ -77,11 +77,11 @@ void loop()
 {
   WaitForPrefix();
   
+  while(Serial.available() < SoftPWM.size());
+ 
   for (uint8_t i = 0; i < SoftPWM.size(); i++)
   {
-    while(!Serial.available());
-    SoftPWM.set( i, Serial.read());
-
+      SoftPWM.set( i, Serial.read());
   }
 }
 
@@ -91,7 +91,9 @@ void WaitForPrefix()
   uint8_t first = 0, second = 0;
   while (second != 0x55 || first != 0xAA)
   {
-    while (!Serial.available());
+    while (!Serial.available()){
+      
+    };
     second = first;
     first = Serial.read();
   }
